@@ -6,12 +6,38 @@
 [![Nav2](https://img.shields.io/badge/Nav2-Controller-green)](https://navigation.ros.org/)
 [![C++17](https://img.shields.io/badge/C++-17-blue)](https://www.iso.org/standard/68564.html)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10+-brightgreen)](https://www.python.org/)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-orange)](LICENSE)
 
-**🧠 智能神经网络路径跟踪控制器 - Nav2 插件**
-
-*将 NeuPAN 神经网络路径规划器无缝集成到 ROS2 Navigation 框架中*
+<br/>
+<strong>🧠 神经网络路径跟踪控制器 · Nav2 插件</strong>
+<br/>
+<em>将 NeuPAN 神经网络路径规划器无缝集成到 ROS 2 Navigation 框架中</em>
 
 </div>
+
+---
+
+<details>
+<summary><strong>📚 目录</strong></summary>
+
+- [📖 项目概述](#-项目概述)
+- [✨ 核心特性](#-核心特性)
+- [🏗️ 架构设计](#️-架构设计)
+- [📦 系统要求](#-系统要求)
+- [🚀 快速安装](#-快速安装)
+- [⚙️ 配置使用](#️-配置使用)
+- [🔧 高级配置](#-高级配置)
+- [🧪 测试验证](#-测试验证)
+- [📊 性能指标](#-性能指标)
+- [🚨 故障排除](#-故障排除)
+- [🔬 API 参考](#-api-参考)
+- [🤝 贡献指南](#-贡献指南)
+- [📝 版本历史](#-版本历史)
+- [📚 相关资源](#-相关资源)
+- [📄 许可证](#-许可证)
+- [🙏 致谢](#-致谢)
+
+</details>
 
 ## 📖 项目概述
 
@@ -82,6 +108,8 @@ pip3 install neupan  # NeuPAN 核心算法包
 
 ## 🚀 快速安装
 
+> 提示：以下示例默认在 Linux/ROS 2 Humble 环境中执行。
+
 ### 1. 创建工作空间
 ```bash
 mkdir -p ~/nav2_ws/src
@@ -90,7 +118,7 @@ cd ~/nav2_ws/src
 
 ### 2. 克隆项目
 ```bash
-git clone https://github.com/huapu-kaf/neupan_nav2_controller.git
+git clone <your-repo-url> neupan_nav2_controller
 cd ~/nav2_ws
 ```
 
@@ -248,7 +276,7 @@ ros2 launch neupan_nav2_controller neupan_nav2_test.launch.py
 
 ### 常见问题
 
-#### 1. Python 模块导入失败
+#### 1) Python 模块导入失败
 ```bash
 # 检查 Python 路径
 python3 -c "import sys; print('\n'.join(sys.path))"
@@ -256,7 +284,7 @@ python3 -c "import sys; print('\n'.join(sys.path))"
 python3 -c "import neupan; print('NeuPAN imported successfully')"
 ```
 
-#### 2. 控制器启动失败
+#### 2) 控制器启动失败
 ```bash
 # 检查插件注册
 ros2 plugin list | grep neupan_nav2_controller
@@ -264,7 +292,7 @@ ros2 plugin list | grep neupan_nav2_controller
 ros2 launch --debug nav2_bringup navigation_launch.py
 ```
 
-#### 3. 性能问题
+#### 3) 性能问题
 ```bash
 # 监控资源使用
 top -p $(pgrep -f controller_server)
@@ -353,14 +381,12 @@ public:
 
 - **NeuPAN 开发团队** - 提供核心算法
 - **ROS2 Nav2 团队** - 提供导航框架
-
-
 ---
 
 <div align="center">
 
-**🌟 如果这个项目对您有帮助，请给个 Star！ 🌟**
+<strong>🌟 如果这个项目对您有帮助，请给个 Star！ 🌟</strong>
 
 [报告问题](https://github.com/your-repo/issues) • [功能请求](https://github.com/your-repo/issues) • [技术讨论](https://github.com/your-repo/discussions)
 
-</div>#
+</div>
