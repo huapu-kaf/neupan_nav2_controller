@@ -2,11 +2,11 @@
 
 <div align="center">
 
-[![ROS2 Humble](https://img.shields.io/badge/ROS2-Humble-blue)](https://docs.ros.org/en/humble/)
-[![Nav2](https://img.shields.io/badge/Nav2-Controller-green)](https://navigation.ros.org/)
-[![C++17](https://img.shields.io/badge/C++-17-blue)](https://www.iso.org/standard/68564.html)
-[![Python 3.10+](https://img.shields.io/badge/Python-3.10+-brightgreen)](https://www.python.org/)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-orange)](LICENSE)
+[![ROS2 Humble](https://img.shields.io/badge/ROS%202-Humble-0A7BBB?style=for-the-badge&logo=ros&logoColor=white)](https://docs.ros.org/en/humble/)
+[![Nav2](https://img.shields.io/badge/Nav2-Controller-3FB950?style=for-the-badge&logo=ros&logoColor=white)](https://navigation.ros.org/)
+[![C++17](https://img.shields.io/badge/C%2B%2B-17-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://www.iso.org/standard/68564.html)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-F48024?style=for-the-badge&logo=gnu&logoColor=white)](LICENSE)
 
 <br/>
 <strong>🧠 神经网络路径跟踪控制器 · Nav2 插件</strong>
@@ -16,6 +16,21 @@
 </div>
 
 ---
+
+<div align="center">
+
+<a href="#-快速安装"><img alt="Quick Start" src="https://img.shields.io/badge/⚡️-Quick_Start-8A2BE2?style=for-the-badge"/></a>
+<a href="#️-配置使用"><img alt="Config" src="https://img.shields.io/badge/🛠-Config-0A84FF?style=for-the-badge"/></a>
+<a href="#-高级配置"><img alt="Advanced" src="https://img.shields.io/badge/⚙️-Advanced-F59E0B?style=for-the-badge"/></a>
+<a href="#-故障排除"><img alt="Troubleshoot" src="https://img.shields.io/badge/🧰-Troubleshoot-E11D48?style=for-the-badge"/></a>
+
+</div>
+
+<br/>
+
+<div align="center">
+  <img src="../NeuPAN-main/img/Architecture.png" alt="NeuPAN Architecture" width="760"/>
+</div>
 
 <details>
 <summary><strong>📚 目录</strong></summary>
@@ -45,6 +60,12 @@
 
 ## ✨ 核心特性
 
+### 亮点速览
+
+| 🧠 智能控制 | 🔌 Nav2 集成 | 🛡️ 生产级 |
+| --- | --- | --- |
+| 端到端神经控制<br/>动态避障 | 标准插件接口<br/>生命周期管理 | Python/C++ 混合架构<br/>完备异常处理 |
+
 ### 🧠 智能控制算法
 - **神经网络端到端控制** - 直接从激光雷达数据到控制指令
 - **实时障碍物避免** - 基于点云的动态避障
@@ -66,6 +87,7 @@
 ## 🏗️ 架构设计
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#e1f5fe', 'secondaryColor': '#f3e5f5', 'primaryTextColor': '#111827', 'lineColor': '#94a3b8', 'fontSize': '14px'}} }%%
 graph TB
     A[Nav2 Planner Server] --> B[全局路径]
     B --> C[NeuPAN Controller]
@@ -274,9 +296,11 @@ ros2 launch neupan_nav2_controller neupan_nav2_test.launch.py
 
 ## 🚨 故障排除
 
-### 常见问题
+### 常见问题（可展开）
 
-#### 1) Python 模块导入失败
+<details>
+<summary><strong>1) Python 模块导入失败</strong></summary>
+
 ```bash
 # 检查 Python 路径
 python3 -c "import sys; print('\n'.join(sys.path))"
@@ -284,7 +308,11 @@ python3 -c "import sys; print('\n'.join(sys.path))"
 python3 -c "import neupan; print('NeuPAN imported successfully')"
 ```
 
-#### 2) 控制器启动失败
+</details>
+
+<details>
+<summary><strong>2) 控制器启动失败</strong></summary>
+
 ```bash
 # 检查插件注册
 ros2 plugin list | grep neupan_nav2_controller
@@ -292,13 +320,19 @@ ros2 plugin list | grep neupan_nav2_controller
 ros2 launch --debug nav2_bringup navigation_launch.py
 ```
 
-#### 3) 性能问题
+</details>
+
+<details>
+<summary><strong>3) 性能问题</strong></summary>
+
 ```bash
 # 监控资源使用
 top -p $(pgrep -f controller_server)
 # 调整控制频率
 # 在参数文件中降低 controller_frequency
 ```
+
+</details>
 
 ### 调试技巧
 
@@ -381,6 +415,8 @@ public:
 
 - **NeuPAN 开发团队** - 提供核心算法
 - **ROS2 Nav2 团队** - 提供导航框架
+
+[⬆︎ 回到顶部](#neupan-nav2-controller-plugin)
 ---
 
 <div align="center">
