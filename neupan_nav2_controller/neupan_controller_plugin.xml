@@ -1,0 +1,10 @@
+<library path="neupan_nav2_controller">
+  <class name="neupan_nav2_controller/NeuPANController" type="neupan_nav2_controller::NeuPANController" base_class_type="nav2_core::Controller">
+    <description>
+      NeuPAN Neural Path Planning Controller Plugin for Navigation2.
+      This controller uses deep reinforcement learning to compute velocity commands 
+      for safe and efficient robot navigation in dynamic environments.
+      Supports differential drive, Ackermann, and omnidirectional kinematics.
+    </description>
+  </class>
+</library> 
