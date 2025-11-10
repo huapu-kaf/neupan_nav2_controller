@@ -4,6 +4,9 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <thread>
+#include <atomic>
+#include <mutex>
 
 #include "rclcpp/rclcpp.hpp"
 #include "nav2_core/controller.hpp"
@@ -95,9 +98,19 @@ public:
 
 protected:
   /**
-   * @brief Initialize Python interpreter and NeuPAN module
+   * @brief Initialize Python interpreter and NeuPAN module synchronously
    */
   bool initializePython();
+
+  /**
+   * @brief Start Python initialization in background thread
+   */
+  void startAsyncPythonInitialization();
+
+  /**
+   * @brief Background Python initialization worker
+   */
+  void pythonInitializationWorker();
 
   /**
    * @brief Check NumPy compatibility and version
@@ -156,6 +169,55 @@ protected:
    */
   void convertNav2PathToNeuPAN(const nav_msgs::msg::Path & path);
 
+  /**
+   * @brief Generate a velocity-based predicted trajectory showing where the robot will go
+   * @param pose Current robot pose
+   * @param cmd_vel Current velocity command from the controller
+   * @return Predicted trajectory path based on velocity commands
+   */
+  nav_msgs::msg::Path generateVelocityBasedTrajectory(
+    const geometry_msgs::msg::PoseStamped & pose,
+    const geometry_msgs::msg::Twist & cmd_vel);
+
+  /**
+   * @brief Generate local plan from global plan (like pb_omni controller)
+   * @param pose Current robot pose
+   * @return Local path segment
+   */
+  nav_msgs::msg::Path generateLocalPlan(
+    const geometry_msgs::msg::PoseStamped & pose);
+
+  /**
+   * @brief Transform pose between frames
+   * @param target_frame Target coordinate frame
+   * @param input_pose Input pose to transform
+   * @param output_pose Transformed output pose
+   * @return True if transformation successful
+   */
+  bool transformPose(
+    const std::string & target_frame,
+    const geometry_msgs::msg::PoseStamped & input_pose,
+    geometry_msgs::msg::PoseStamped & output_pose);
+
+  /**
+   * @brief Compute simple fallback velocity commands when Python is not ready
+   * @param pose Current robot pose
+   * @param global_plan Global plan to follow
+   * @return Simple velocity command toward next waypoint
+   */
+  geometry_msgs::msg::TwistStamped computeSimpleFallbackVelocity(
+    const geometry_msgs::msg::PoseStamped & pose,
+    const nav_msgs::msg::Path & global_plan);
+
+  /**
+   * @brief Publish local plan for visualization
+   * @param pose Current robot pose
+   * @param local_path Local path to publish
+   */
+  void publishLocalPlan(
+    const geometry_msgs::msg::PoseStamped & pose,
+    const nav_msgs::msg::Path & local_path);
+
   // Node and plugin information
   rclcpp_lifecycle::LifecycleNode::WeakPtr node_;
   std::string plugin_name_;
@@ -167,15 +229,22 @@ protected:
 
   // Python integration
   PyObject * neupan_core_instance_;
-  bool python_initialized_;
+  std::atomic<bool> python_initialized_;
+  std::atomic<bool> python_initialization_in_progress_;
+  std::atomic<bool> python_initialization_failed_;
   bool numpy_initialized_;
   bool numpy_compatible_;
   std::string numpy_version_;
   std::string python_version_;
+  std::unique_ptr<std::thread> python_init_thread_;
+  std::mutex python_mutex_;
 
   // Laser scan subscriber
   rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr laser_sub_;
   sensor_msgs::msg::LaserScan::ConstSharedPtr latest_laser_scan_;
+
+  // Path visualization publisher
+  rclcpp_lifecycle::LifecyclePublisher<nav_msgs::msg::Path>::SharedPtr local_plan_pub_;
 
   // Parameters
   double max_linear_velocity_;

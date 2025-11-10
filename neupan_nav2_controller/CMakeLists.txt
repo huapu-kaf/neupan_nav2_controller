@@ -122,31 +122,42 @@ install(DIRECTORY launch/
   DESTINATION share/${PROJECT_NAME}/launch
 )
 
-# Install config files
-install(DIRECTORY config/
-  DESTINATION share/${PROJECT_NAME}/config
-)
+# Install config files (if directory exists)
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/config)
+  install(DIRECTORY config/
+    DESTINATION share/${PROJECT_NAME}/config
+  )
+endif()
 
-# Install scripts
-install(DIRECTORY scripts/
-  DESTINATION share/${PROJECT_NAME}/scripts
-  USE_SOURCE_PERMISSIONS
-)
+# Install scripts (if directory exists)
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/scripts)
+  install(DIRECTORY scripts/
+    DESTINATION share/${PROJECT_NAME}/scripts
+    USE_SOURCE_PERMISSIONS
+  )
+endif()
 
-# Install vendored NeuPAN resources (algorithm + configs + minimal models)
-install(DIRECTORY vendor/NeuPAN-main/
-  DESTINATION share/${PROJECT_NAME}/vendor/NeuPAN-main
-)
+# Install vendored NeuPAN resources (algorithm + configs + minimal models) - if exists
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/vendor/NeuPAN-main)
+  install(DIRECTORY vendor/NeuPAN-main/
+    DESTINATION share/${PROJECT_NAME}/vendor/NeuPAN-main
+  )
+endif()
 
-# Install in-package models directory
-install(DIRECTORY model/
-  DESTINATION share/${PROJECT_NAME}/model
-)
+# Install in-package models directory - if exists
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/model)
+  install(DIRECTORY model/
+    DESTINATION share/${PROJECT_NAME}/model
+  )
+endif()
 
 # Linting
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
+  
+  # Add test directory
+  add_subdirectory(test)
 endif()
 
 # Export dependencies
