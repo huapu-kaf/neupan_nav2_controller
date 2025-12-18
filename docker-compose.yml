@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  neupan_nav2_controller_test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: neupan_nav2_test
+    environment:
+      - ROS_DOMAIN_ID=42
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+    volumes:
+      # 挂载项目源代码（用于开发调试）
+      - .:/ros2_ws/src/neupan_nav2_controller
+      # 挂载X11套接字（用于GUI应用）
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      # 挂载测试结果目录
+      - ./test_results:/test_results
+    networks:
+      - ros_network
+    privileged: true
+    stdin_open: true
+    tty: true
+    command: >
+      bash -c "
+      source /opt/ros/humble/setup.bash &&
+      source /ros2_ws/install/setup.bash &&
+      /test_script.sh
+      "
+
+  # 可选：添加RViz可视化服务
+  rviz:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: neupan_rviz
+    environment:
+      - ROS_DOMAIN_ID=42
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - .:/ros2_ws/src/neupan_nav2_controller
+    networks:
+      - ros_network
+    depends_on:
+      - neupan_nav2_controller_test
+    command: >
+      bash -c "
+      source /opt/ros/humble/setup.bash &&
+      source /ros2_ws/install/setup.bash &&
+      rviz2
+      "
+    profiles:
+      - visualization
+
+  # 可选：添加Gazebo仿真服务
+  gazebo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: neupan_gazebo
+    environment:
+      - ROS_DOMAIN_ID=42
+      - DISPLAY=${DISPLAY}
+      - GAZEBO_MODEL_PATH=/ros2_ws/src/neupan_nav2_controller/models
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - .:/ros2_ws/src/neupan_nav2_controller
+    networks:
+      - ros_network
+    depends_on:
+      - neupan_nav2_controller_test
+    command: >
+      bash -c "
+      source /opt/ros/humble/setup.bash &&
+      gazebo --verbose
+      "
+    profiles:
+      - simulation
+
+networks:
+  ros_network:
+    driver: bridge

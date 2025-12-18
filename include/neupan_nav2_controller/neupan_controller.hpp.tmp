@@ -1,0 +1,1 @@
+void convertNav2PathToNeuPAN(const nav_msgs::msg::Path & path);
