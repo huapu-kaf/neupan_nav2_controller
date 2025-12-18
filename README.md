@@ -133,7 +133,7 @@ cd ~/nav2_ws/src
 ### 2. 克隆项目
 ```bash
 # 将项目克隆到 src 目录下
-git clone <your-repo-url> neupan_nav2_controller
+ git clone https://github.com/huapu-kaf/neupan_nav2_controller.git
 cd ~/nav2_ws
 ```
 
