@@ -13,7 +13,7 @@ set -euo pipefail
 WS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PYTHON_BIN="${PYTHON_BIN:-python3}"
 VENV_DIR="${VENV_DIR:-$WS_DIR/neupan_env}"
-REQ_FILE="$WS_DIR/src/neupan_nav2_controller/vendor/NeuPAN/requirements.txt""
+REQ_FILE="$WS_DIR/src/neupan_nav2_controller/vendor/NeuPAN/requirements.txt"
 
 if [[ ! -f "$REQ_FILE" ]]; then
   echo "[ERROR] requirements.txt not found: $REQ_FILE" >&2
